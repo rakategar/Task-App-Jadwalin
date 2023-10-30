@@ -1,6 +1,6 @@
 <div align="center">
 <img src="/assets/icons/icon.png" width="150"/>
-<h2>ToDark</h2>
+<h2>Jadwal In</h2>
 </div>
 
 ### Short Description:
@@ -57,4 +57,4 @@ We also tried to make the design as convenient and beautiful as possible.
 [![AppGallery](https://img.shields.io/badge/AppGallery-red?style=for-the-badge)](https://appgallery.huawei.ru/app/C107003991)
 [![RuStore](https://img.shields.io/badge/RuStore-blue?style=for-the-badge&logo=vk&logoColor=white)](https://apps.rustore.ru/app/com.yoshi.todark)
 
-Or get the latest APK from the [Releases Section](https://github.com/DarkMooNight/ToDark/releases/latest). You can also find the app on IzzyOnDroid via a F-Droid client [here](https://apt.izzysoft.de/fdroid/index/apk/com.yoshi.todark).
+Or get the latest APK from the [Releases Section](https://github.com/DarkMooNight/todark/releases/latest). You can also find the app on IzzyOnDroid via a F-Droid client [here](https://apt.izzysoft.de/fdroid/index/apk/com.yoshi.todark).

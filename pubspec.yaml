@@ -18,9 +18,7 @@ dependencies:
   isar: ^3.1.0+1
   iconsax: ^0.0.8
   timezone: ^0.9.2
-  file_picker: ^5.5.0
-  google_fonts: ^5.1.0
-  url_launcher: ^6.1.14
+  google_fonts: 4.0.4
   bottom_picker: ^2.0.4
   dynamic_color: ^1.6.6
   path_provider: ^2.1.1
@@ -35,6 +33,30 @@ dependencies:
   flutter_displaymode: ^0.6.0
   sleek_circular_slider: ^2.0.1
   flutter_local_notifications: ^15.1.1
+  term_glyph: ^1.2.1 
+  firebase_core: ^2.1.1
+  firebase_auth: ^4.1.1
+  cloud_firestore: ^4.0.4
+  firebase_storage: ^11.0.4
+  shared_preferences: ^2.0.15
+  progress_dialog:
+    git:
+      url: https://github.com/mostafaAbdelazim/progress_dialog.git
+  flutter_facebook_auth: ^5.0.6
+  http: ^0.13.5
+  image_picker: ^0.8.6
+  cached_network_image: ^3.2.2
+  smooth_page_indicator: ^1.0.0+2
+  the_apple_sign_in: ^1.1.1
+  bloc: ^8.1.0
+  flutter_bloc: ^8.1.1
+  url_launcher: ^6.1.6
+  file_picker: ^5.2.2
+  cupertino_icons: ^1.0.5
+  time_machine: ^0.9.17
+  
+  # firebase_core: ^latest_version
+  # firebase_auth: ^latest_version
 
 dev_dependencies:
   flutter_test:
@@ -50,6 +72,7 @@ flutter_icons:
   image_path: "assets/icons/icon.png"
   adaptive_icon_background: "#181818"
   adaptive_icon_foreground: "assets/icons/icon.png"
+  # image_path: android/app/src/main/ic_launcher-playstore.png
 
 flutter_native_splash:
   color: "#181818"

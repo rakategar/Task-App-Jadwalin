@@ -7,10 +7,12 @@ import 'package:todark/app/modules/tasks/widgets/tasks_action.dart';
 import 'package:todark/app/modules/todos/view/calendar_todos.dart';
 import 'package:todark/app/modules/todos/view/all_todos.dart';
 import 'package:todark/app/modules/todos/widgets/todos_action.dart';
+import 'package:todark/model/user.dart';
 import 'package:todark/theme/theme_controller.dart';
+import 'package:todark/app/modules/tasks/view/all_tasks.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({super.key, required User user});
 
   @override
   State<HomePage> createState() => _HomePageState();

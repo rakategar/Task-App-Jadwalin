@@ -6,8 +6,8 @@ part 'schema.g.dart';
 class Settings {
   Id id = Isar.autoIncrement;
   bool onboard = false;
-  bool? theme;
-  bool materialColor = false;
+  String? theme = 'system';
+  bool materialColor = true;
   bool amoledTheme = false;
   String? language;
 }
@@ -20,6 +20,7 @@ class Tasks {
   int taskColor;
   bool archive;
   int? index;
+  late String uid;
 
   @Backlink(to: 'task')
   final todos = IsarLinks<Todos>();
@@ -30,7 +31,8 @@ class Tasks {
     this.description = '',
     this.archive = false,
     required this.taskColor,
-    this.index,
+    this.index, 
+    required this.uid, // Tambahkan parameter uid di sini
   });
 
   Tasks.fromJson(Map<String, dynamic> json)
@@ -71,7 +73,9 @@ class Todos {
       : id = json['id'],
         name = json['name'],
         description = json['description'] ?? '',
-        todoCompletedTime = json['todoCompletedTime'],
+        todoCompletedTime = json['todoCompletedTime'] != null
+            ? DateTime.fromMicrosecondsSinceEpoch(json['todoCompletedTime'])
+            : json['todoCompletedTime'],
         done = json['done'] ?? false;
 
   Map<String, dynamic> toJson() => {

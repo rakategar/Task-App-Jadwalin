@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "398245586926",
+    "project_id": "db-fix",
+    "storage_bucket": "db-fix.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:398245586926:android:4ca927a566287ac6b590ff",
+        "android_client_info": {
+          "package_name": "com.yoshi.todark"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxLpEqDzqESiI5T3Xod8zk7TGuDDNnEH8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

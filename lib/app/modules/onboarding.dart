@@ -1,9 +1,9 @@
 import 'package:todark/app/data/schema.dart';
-import 'package:todark/app/modules/home.dart';
 import 'package:todark/app/widgets/button.dart';
 import 'package:todark/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:todark/ui/auth/welcome/welcome_screen.dart';
 
 class OnBording extends StatefulWidget {
   const OnBording({super.key});
@@ -28,10 +28,10 @@ class _OnBordingState extends State<OnBording> {
     super.dispose();
   }
 
-  void onBoardHome() {
+  void onBoardWelcome() {
     settings.onboard = true;
     isar.writeTxn(() async => isar.settings.put(settings));
-    Get.off(() => const HomePage(), transition: Transition.downToUp);
+    Get.off(() => const WelcomeScreen(), transition: Transition.downToUp);
   }
 
   @override
@@ -74,7 +74,7 @@ class _OnBordingState extends State<OnBording> {
                     pageIndex == data.length - 1 ? 'getStart'.tr : 'next'.tr,
                 onPressed: () {
                   pageIndex == data.length - 1
-                      ? onBoardHome()
+                      ? onBoardWelcome() // Mengarahkan ke WelcomeScreen setelah selesai papan pemuka
                       : pageController.nextPage(
                           duration: const Duration(milliseconds: 300),
                           curve: Curves.ease,

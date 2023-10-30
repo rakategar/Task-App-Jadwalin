@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
+import 'package:time_machine/time_machine.dart';
 import 'package:todark/app/modules/home.dart';
 import 'package:todark/app/modules/onboarding.dart';
 import 'package:todark/theme/theme.dart';
@@ -17,8 +19,17 @@ import 'package:path_provider/path_provider.dart';
 import 'translation/translation.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb;
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:todark/constants.dart';
+import 'package:todark/firebase_options.dart';
+import 'package:todark/ui/auth/authentication_bloc.dart';
+import 'package:todark/ui/auth/launcherScreen/launcher_screen.dart';
+import 'package:todark/ui/loading_cubit.dart';
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
 late Isar isar;
@@ -37,20 +48,46 @@ final List appLanguages = [
 ];
 
 void main() async {
+  final String timeZoneName;
   WidgetsFlutterBinding.ensureInitialized();
-  await setOptimalDisplayMode();
-  final String timeZoneName = await FlutterTimezone.getLocalTimezone();
-  const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
-  const InitializationSettings initializationSettings =
-      InitializationSettings(android: initializationSettingsAndroid);
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-  tz.initializeTimeZones();
-  tz.setLocalLocation(tz.getLocation(timeZoneName));
   SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(systemNavigationBarColor: Colors.black));
+  if (Platform.isAndroid) {
+    await setOptimalDisplayMode();
+  }
+  if (Platform.isAndroid || Platform.isIOS) {
+    timeZoneName = await FlutterTimezone.getLocalTimezone();
+  } else {
+    timeZoneName = '${DateTimeZone.local}';
+  }
+  tz.initializeTimeZones();
+  tz.setLocalLocation(tz.getLocation(timeZoneName));
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+  const LinuxInitializationSettings initializationSettingsLinux =
+      LinuxInitializationSettings(defaultActionName: 'Jadwal in');
+  const InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+    linux: initializationSettingsLinux,
+  );
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   await isarInit();
-  runApp(const MyApp());
+  if (kIsWeb || defaultTargetPlatform == TargetPlatform.macOS) {
+    await FacebookAuth.i.webAndDesktopInitialize(
+      appId: facebookAppID,
+      cookie: true,
+      xfbml: true,
+      version: "v15.0",
+    );
+  }
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  runApp(MultiRepositoryProvider(
+    providers: [
+      RepositoryProvider(create: (_) => AuthenticationBloc()),
+      RepositoryProvider(create: (_) => LoadingCubit()),
+    ],
+    child: const MyApp(),
+  ));
 }
 
 Future<void> setOptimalDisplayMode() async {
@@ -76,10 +113,15 @@ Future<void> isarInit() async {
     ],
     directory: (await getApplicationSupportDirectory()).path,
   );
-  settings = await isar.settings.where().findFirst() ?? Settings();
+  settings = isar.settings.where().findFirstSync() ?? Settings();
   if (settings.language == null) {
     settings.language = '${Get.deviceLocale}';
-    isar.writeTxn(() async => isar.settings.put(settings));
+    isar.writeTxnSync(() => isar.settings.putSync(settings));
+  }
+
+  if (settings.theme == null) {
+    settings.theme = 'system';
+    isar.writeTxnSync(() => isar.settings.putSync(settings));
   }
 }
 
@@ -92,7 +134,7 @@ class MyApp extends StatefulWidget {
     bool? newMaterialColor,
     Locale? newLocale,
   }) async {
-    final state = context.findAncestorStateOfType<_MyAppState>()!;
+    final state = context.findAncestorStateOfType<MyAppState>()!;
 
     if (newAmoledTheme != null) {
       state.changeAmoledTheme(newAmoledTheme);
@@ -106,11 +148,12 @@ class MyApp extends StatefulWidget {
   }
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  MyAppState createState() => MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class MyAppState extends State<MyApp> with WidgetsBindingObserver {
   final themeController = Get.put(ThemeController());
+  // Set default `_initialized` and `_error` state to false
 
   void changeAmoledTheme(bool newAmoledTheme) {
     setState(() {
@@ -180,9 +223,7 @@ class _MyAppState extends State<MyApp> {
             supportedLocales:
                 appLanguages.map((e) => e['locale'] as Locale).toList(),
             debugShowCheckedModeBanner: false,
-            home: settings.onboard == false
-                ? const OnBording()
-                : const HomePage(),
+            home: const LauncherScreen(),
             builder: EasyLoading.init(),
           );
         },

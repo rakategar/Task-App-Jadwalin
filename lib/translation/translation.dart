@@ -127,7 +127,7 @@ class Translation extends Translations {
           'allTasks': 'All tasks',
           'create': 'Create',
           'completed': 'Completed',
-          'categories': 'Categories',
+          'categories': 'Jadwal in',
           'taskCompleted': 'Tasks Completed',
           'categoryDelete': 'Category removed',
           'createCategory': 'Category created',

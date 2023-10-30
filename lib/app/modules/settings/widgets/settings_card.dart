@@ -18,7 +18,7 @@ class SettingCard extends StatelessWidget {
     this.value,
     this.onPressed,
     this.onChange,
-    this.textInfo,
+    this.textInfo, 
   });
   final Widget icon;
   final String text;
@@ -34,6 +34,7 @@ class SettingCard extends StatelessWidget {
   final Function()? onPressed;
   final Function(bool)? onChange;
   final double? elevation;
+  
 
   @override
   Widget build(BuildContext context) {

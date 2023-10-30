@@ -11,7 +11,7 @@ class NotificationShow {
         ?.requestPermission();
     AndroidNotificationDetails androidNotificationDetails =
         const AndroidNotificationDetails(
-      'ToDark',
+      'Jadwal in',
       'DARK NIGHT',
       priority: Priority.max,
       importance: Importance.max,
